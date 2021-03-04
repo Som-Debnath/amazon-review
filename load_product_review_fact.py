@@ -44,7 +44,7 @@ def load_product_review_fact(run_id):
         .getOrCreate()
 
     # Source data file path --review parquet
-    path = "C:\\Users\\somde\\takeaway\\product_review.parquet\\*"
+    path = input_file
 
     # Product review dataframe object creation
     reviewDF = spark.read.parquet(path)

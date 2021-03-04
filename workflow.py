@@ -14,6 +14,7 @@ import luigi
 
 import database as db
 
+import source_data_download as sdd
 import product as prod
 import product_category as p_cat
 import related_products as rel_prod
@@ -26,6 +27,18 @@ import load_product_also_viewed_dimension as p_also_viewed_dim
 import load_product_bought_together_dimension as p_bought_together_dim
 import load_product_buy_after_viewing_dimension as p_buy_after_view_dim
 import load_product_review_fact as p_review_fact
+
+import configparser
+
+# Configuration Parameters
+
+config = configparser.ConfigParser()
+config.read('config.ini')
+review_data_download_url=config['DownloadReviewData']['url']
+dest_review_file_with_path=config['DownloadReviewData']['dest_file_with_path']
+
+meta_data_download_url=config['DownloadProductMetaData']['url']
+dest_meta_data_file_with_path=config['DownloadProductMetaData']['dest_file_with_path']
 
 
 # Start of the workflow
@@ -40,11 +53,28 @@ class StartWorkFlow(luigi.Task):
             outfile.write('Start Time : ')
             outfile.write(str(dt))
 
+# Start of downloading the review data
+class DownloadReviewData(luigi.Task):
+    def requires(self):
+        return StartWorkFlow()
+    def output(self):
+        return luigi.LocalTarget('./log/DownloadReviewData.txt')
+    def run(self):
+        sdd.file_download(review_data_download_url,dest_review_file_with_path)
+
+# Start of downloading the review data
+class DownloadProductMetaData(luigi.Task):
+    def requires(self):
+        return StartWorkFlow()
+    def output(self):
+        return luigi.LocalTarget('./log/DownloadProductMetaData.txt')
+    def run(self):
+        sdd.file_download(meta_data_download_url,dest_meta_data_file_with_path)
 
 # Task - Product Extraction from JSON file into Parquet file
 class ExtractProduct(luigi.Task):
     def requires(self):
-        return StartWorkFlow()
+        return DownloadProductMetaData()
     def output(self):
         return luigi.LocalTarget('./log/ExtractProduct.txt')
     def run(self):
@@ -74,7 +104,7 @@ class ExtractProduct(luigi.Task):
 # Task - Product Category Extraction from JSON file into Parquet file
 class ExtractProdCategory(luigi.Task):
     def requires(self):
-        return StartWorkFlow()
+        return DownloadProductMetaData()
     def output(self):
         return luigi.LocalTarget('./log/ExtractProdCategory.txt')
     def run(self):
@@ -104,7 +134,7 @@ class ExtractProdCategory(luigi.Task):
 # Task - Related Product Extraction from JSON file into Parquet file
 class ExtractRelatedProduct(luigi.Task):
     def requires(self):
-        return StartWorkFlow()
+        return DownloadProductMetaData()
     def output(self):
         return luigi.LocalTarget('./log/ExtracRelatedProduct.txt')
     def run(self):
@@ -314,7 +344,7 @@ class LoadProdBuyAfterViewingDimension(luigi.Task):
 # Task - Product Review data extraction from JSON file
 class ExtractProductReview(luigi.Task):
     def requires(self):
-        return [StartWorkFlow()]
+        return DownloadReviewData()
     def output(self):
         return luigi.LocalTarget('./log/ExtractProductReview.txt')
     def run(self):
