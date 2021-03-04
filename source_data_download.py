@@ -7,6 +7,7 @@
 import sys
 import os
 import urllib.request
+import wget
 
 def file_download(url,dest_file_with_path):
 
@@ -14,7 +15,7 @@ def file_download(url,dest_file_with_path):
 
     try:
         if not os.path.exists(dest_file_with_path):
-            urllib.request.urlretrieve(url,dest_file_with_path)
+            wget.download(url,dest_file_with_path)
     except Exception as err:
         print(err)
 
