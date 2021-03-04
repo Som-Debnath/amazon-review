@@ -59,13 +59,15 @@ def data_presentation():
                            having count(*)>30"
                 )\
         .load()
-
-    sns.set(rc={'figure.figsize': (25, 20)})
-    reviewHistDF=productReviewCountDF.toPandas()
-    fig=sns.barplot(data=reviewHistDF, x="product_id",y="count")
-    fig.set(xlabel='Product Id', ylabel='Review Count')
-    plt.setp(fig.get_xticklabels(), rotation=45)
-    fig.get_figure().savefig(prod_review_hist_file)
+    if productReviewCountDF.count()>0:
+        sns.set(rc={'figure.figsize': (25, 20)})
+        reviewHistDF=productReviewCountDF.toPandas()
+        fig=sns.barplot(data=reviewHistDF, x="product_id",y="count")
+        fig.set(xlabel='Product Id', ylabel='Review Count')
+        plt.setp(fig.get_xticklabels(), rotation=45)
+        fig.get_figure().savefig(prod_review_hist_file)
+    else:
+        print('productReviewCountDF dataframe does not data')
 
     # Reading product count per product price bucket
     productWithPriceBucketDF = spark.read \
@@ -82,13 +84,15 @@ def data_presentation():
                                group by B.price_bucket_desc"
                 ) \
         .load()
-
-    sns.set(rc={'figure.figsize': (40, 35)})
-    productWithPriceBucketDF = productWithPriceBucketDF.toPandas()
-    fig = sns.barplot(data=productWithPriceBucketDF, x="bucket_name", y="count")
-    fig.set(xlabel='Price bucket', ylabel='Product Count')
-    plt.setp(fig.get_xticklabels(), rotation=45)
-    fig.get_figure().savefig(prod_with_pricebucket_report_file)
+    if productWithPriceBucketDF.count()>0:
+        sns.set(rc={'figure.figsize': (40, 35)})
+        productWithPriceBucketDF = productWithPriceBucketDF.toPandas()
+        fig = sns.barplot(data=productWithPriceBucketDF, x="bucket_name", y="count")
+        fig.set(xlabel='Price bucket', ylabel='Product Count')
+        plt.setp(fig.get_xticklabels(), rotation=45)
+        fig.get_figure().savefig(prod_with_pricebucket_report_file)
+    else:
+        print('productWithPriceBucketDF dataframe does not have any data')
 
     # Reading product count per product category
     productWithCategoryDF = spark.read \
@@ -105,13 +109,15 @@ def data_presentation():
                                    group by B.category_name"
                 ) \
         .load()
-
-    sns.set(rc={'figure.figsize': (40, 35)})
-    productWithCategoryDF = productWithCategoryDF.toPandas()
-    fig = sns.barplot(data=productWithCategoryDF, x="category_name", y="count")
-    fig.set(xlabel='Product Category', ylabel='Product Count')
-    plt.setp(fig.get_xticklabels(), rotation=45)
-    fig.get_figure().savefig(product_category_report_file)
+    if productWithCategoryDF.count() > 0:
+        sns.set(rc={'figure.figsize': (40, 35)})
+        productWithCategoryDF = productWithCategoryDF.toPandas()
+        fig = sns.barplot(data=productWithCategoryDF, x="category_name", y="count")
+        fig.set(xlabel='Product Category', ylabel='Product Count')
+        plt.setp(fig.get_xticklabels(), rotation=45)
+        fig.get_figure().savefig(product_category_report_file)
+    else:
+        print('productWithCategoryDF dataframe does not have data')
 
 
 if __name__ == '__main__':
