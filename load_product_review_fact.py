@@ -75,7 +75,7 @@ def load_product_review_fact(run_id):
                                     A.overall as overall_rating,\
                                     A.summary as review_summary,\
                                     A.unixReviewTime as unix_review_time,\
-                                    cast(date_format(to_date(reviewTime,'MM dd, y'),'yMMdd') as int) date_key \
+                                    cast(date_format(to_date(reviewTime,'MM d, y'),'yMMdd') as int) date_key \
                             FROM reviewDF A LEFT JOIN productDF B \
                            ON (A.asin=B.asin)")
 
