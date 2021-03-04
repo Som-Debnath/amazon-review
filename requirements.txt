@@ -1,5 +1,5 @@
 pip>=21.0.1
-psycopg2>=2.8.6
+psycopg2-binary
 pyspark>=3.0.2
 luigi>=3.0.2
 matplotlib>=3.3.4
