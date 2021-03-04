@@ -61,6 +61,8 @@ class DownloadReviewData(luigi.Task):
         return luigi.LocalTarget('./log/DownloadReviewData.txt')
     def run(self):
         sdd.file_download(review_data_download_url,dest_review_file_with_path)
+        with self.output().open('w') as outfile:
+            outfile.write('Task DownloadReviewData is done!\n')
 
 # Start of downloading the review data
 class DownloadProductMetaData(luigi.Task):
@@ -70,6 +72,8 @@ class DownloadProductMetaData(luigi.Task):
         return luigi.LocalTarget('./log/DownloadProductMetaData.txt')
     def run(self):
         sdd.file_download(meta_data_download_url,dest_meta_data_file_with_path)
+        with self.output().open('w') as outfile:
+            outfile.write('Task DownloadProductMetaData is done!\n')
 
 # Task - Product Extraction from JSON file into Parquet file
 class ExtractProduct(luigi.Task):
