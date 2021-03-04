@@ -1,5 +1,5 @@
 # DWH implementation based on AMAZON product review dataset
-This repository contains the DWH model creation scripts as well as data pipelines to extract, transform and load the data into DWH. Finally, three insights (reports) about the data are prodcued from the DWH.
+This repository contains the DWH model creation scripts as well as data pipelines to extract, transform and load the data into DWH. Finally, three insights (reports) about the data are produced from the DWH.
 
 ## Prerequisites and dependencies
 
@@ -22,8 +22,8 @@ ___
 ---
 ## Execution pipeline
 
-- 1. Modify the ./config.ini files as per the target insfrastructure.
-- 2. Execute the ./datamodel.sql file in the desired postgresql database instance.
+- 1. Modify the ./config.ini files as per the target infrastructure.
+- 2. Execute the ./datamodel.sql file against the desired postgresql database instance.
 - 2. Run the workflow.py (luigi orchestration)
 ```
     $python  ./workflow.py EndOfWorkflow --local-scheduler
