@@ -22,7 +22,7 @@ ___
 ## Execution
 
 - 1. Modify the ./config.ini files as per the target insfrastructure.
-- 2. Execute the .sql file in the desired postgresql database instance.
+- 2. Execute the ./datamodel.sql file in the desired postgresql database instance.
 - 2. Run the workflow.py (luigi orchestration)
 ```
     $python  workflow.py EndOfWorkflow --local-scheduler
